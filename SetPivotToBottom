@@ -1,0 +1,26 @@
+import maya.cmds as mc 
+
+def setPivotToBottom():
+    selection = mc.ls(sl=1)
+    #check if selection
+    if selection == []:
+        mc.warning("please select a mesh")
+        
+    for selected in selection:
+        
+        #center pivot    
+        mc.xform(selected, cp=1)
+        
+        #get bounding box
+        bounding_box = mc.xform(selected, q=1,bb=1, ws=1)
+        
+        #assign bb variables
+        x_min, y_min, z_min, x_max, y_max, z_max = bounding_box
+        
+        #set pivot to bottom y
+        mc.move (y_min, [ selected+'.scalePivot', selected+'.rotatePivot'], y =1, absolute = 1)
+        
+        #move object to grid
+        mc.move(y_min*-1, selected, r=1, y=1)
+
+setPivotToBottom()
